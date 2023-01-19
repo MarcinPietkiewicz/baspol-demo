@@ -1,9 +1,12 @@
-import React from "react";
+import {useState} from "react";
 import "./App.scss";
 import { Container, Row, Col, Button, Stack, Modal, Form } from "react-bootstrap";
 
 function App() {
-  const [newClientModalShow, setNewClientModalShow] = React.useState(false);
+  const [newClientModalShow, setNewClientModalShow] = useState(false);
+  const [clients, setClients] = useState({});
+
+  
 
   return (
     <div className="App">
