@@ -1,12 +1,38 @@
-import {useState} from "react";
+import { useState } from "react";
 import "./App.scss";
+import { useEffect } from "react";
 import { Container, Row, Col, Button, Stack, Modal, Form } from "react-bootstrap";
+import { useAppDispatch, useAppSelector } from "./app/hooks";
+import { addClient } from "./features/clients/client-slice";
+
 
 function App() {
   const [newClientModalShow, setNewClientModalShow] = useState(false);
-  const [clients, setClients] = useState({});
+  const [clients, setClients] = useState([]);
+
+  const x = useAppSelector(state => state.clients);
+
+  useEffect(() => {
+    fetch("db.json")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data);
+        const x = data.clients.map(entry => entry);
+        console.log('x:');
+        console.log(x);
+        x.map(entry => setClients([...clients, { firstName: entry.name, surname: entry.surname }]));
+        // not working - don't know why?
+        useAppDispatch(addClient('pellowski', 'adam'))
+        useAppDispatch(addClient(x.name, x.surname))
+        return data;
+      })
+      .then(setTimeout(data => {
+        console.log('after 2 secs...:');
+        console.log(clients)}, 2000));
+  }, []);
 
   
+
 
   return (
     <div className="App">
@@ -20,8 +46,9 @@ function App() {
         </Row>
         <Row>
           <Stack gap={2} className="col-sm-4 mx-auto p-2">
-            <div className="bg-light border p-2">Klient 1 - ilość pracowników - ilość list płac</div>
-            <div className="bg-light border p-2">Klient 2 - ilość pracowników - ilość list płac</div>
+            <div className="bg-light border p-2">
+              Klient 1 - ilość pracowników - 
+            </div>
             <Button
               variant="primary"
               onClick={() => {
